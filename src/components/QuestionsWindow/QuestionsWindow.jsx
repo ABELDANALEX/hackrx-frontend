@@ -6,8 +6,13 @@ export default function QuestionsWindow({ sessionID }) {
   const [questions, setQuestions] = useState(() => {
     if (!sessionID) return [];
     const saved = sessionStorage.getItem(`${sessionID}-questions`);
-    return saved ? JSON.parse(saved) : [];
-  });
+    if (saved) {
+      // parse saved questions and mark all as not latest
+      return JSON.parse(saved).map(q => ({ ...q, isLatest: false }));
+    }
+    return [];
+});
+
 
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [queue, setQueue] = useState([]); // pending questions
@@ -38,6 +43,7 @@ export default function QuestionsWindow({ sessionID }) {
       question: currentQuestion,
       answer: null, // placeholder
       timestamp: new Date().toLocaleTimeString(),
+      isLatest: true,
     };
 
     setQuestions((prev) => [...prev, newQA]);
@@ -47,33 +53,35 @@ export default function QuestionsWindow({ sessionID }) {
 
   // Process queue with semaphore
   useEffect(() => {
-    if (queue.length === 0) return;
-    if (activeCount.current >= maxConcurrent) return; // wait for slot
+  if (queue.length === 0) return;
+  if (activeCount.current >= maxConcurrent) return; // wait for slot
 
-    const next = queue[0]; // peek first
-    activeCount.current += 1;
+  const next = queue[0]; // peek first
+  activeCount.current += 1;
 
-    (async () => {
-      try {
-        const answer = await fetchAnswer(next.question);
-        setQuestions((prev) =>
-          prev.map((qa) =>
-            qa.id === next.id ? { ...qa, answer } : qa
-          )
-        );
-      } catch (err) {
-        setQuestions((prev) =>
-          prev.map((qa) =>
-            qa.id === next.id ? { ...qa, answer: "Error fetching answer." } : qa
-          )
-        );
-      } finally {
-        // dequeue processed item
-        setQueue((prev) => prev.slice(1));
-        activeCount.current -= 1;
-      }
-    })();
-  }, [queue, questions]);
+  (async () => {
+    try {
+      const answer = await fetchAnswer(next.question);
+      setQuestions((prev) =>
+        prev.map((qa) =>
+          qa.id === next.id ? { ...qa, answer } : qa
+        )
+      );
+    } catch (err) {
+      setQuestions((prev) =>
+        prev.map((qa) =>
+          qa.id === next.id ? { ...qa, answer: "Error fetching answer." } : qa
+        )
+      );
+    } finally {
+
+      // dequeue processed item
+      setQueue((prev) => prev.slice(1));
+      activeCount.current -= 1;
+    }
+  })();
+}, [queue, questions]);
+
 
   return (
     <div className="questions-window">
@@ -83,15 +91,15 @@ export default function QuestionsWindow({ sessionID }) {
         </div>
       ) : (
         <div className="qa-list">
-          {questions.map((qa) => (
-            <QuestionAnswer
-              key={qa.id}
-              question={qa.question}
-              answer={qa.answer || "Fetching answer..."}
-              timestamp={qa.timestamp}
-            />
-          ))}
-        </div>
+        {questions.map((qa, idx) => (
+          <QuestionAnswer
+            key={qa.id}
+            question={qa.question}
+            answer={qa.answer}
+            isLatest={qa.isLatest} 
+          />
+  ))}
+</div>
       )}
       <div className="ask-container">
         <input
