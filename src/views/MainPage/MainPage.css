@@ -8,7 +8,76 @@
 }
 
 body,html{
-  background-color: black;
-  margin: 0;
-  padding: 0;
+  background-color: #1e1e1e;
+  margin: 0px;
+  padding: 0px;
+}
+
+.pdf-info-row {
+  display: flex;
+  justify-content: space-between; /* left: name, right: button */
+  align-items: center;
+  width: 100%;
+  padding: 0px 20px;
+  background-color: #1f1f1f;
+  border-bottom: 1px solid #333;
+  border-radius: 6px;
+  /* margin: 10px 0; */
+  box-sizing: border-box;
+}
+
+.pdf-name-container {
+  max-width: 200px;       /* fixed width */
+  overflow: hidden;        /* hide overflow */
+  white-space: nowrap;     /* keep text on one line */
+  position: relative;
+  height: 100%;           /* take full height of parent row */
+  display: flex;          /* for vertical centering of text */
+  align-items: center;
+  padding: 20px 0px;
+}
+
+.pdf-name {
+  font-size: 20px;
+  display: inline-block;
+  color: #d40606;
+  font-weight: 500;
+  /* transition: transform 0.3s ease; */
+}
+
+.pdf-name-container:hover{
+  background-color: #2a2a2a;
+  transition: background-color 0.5s ease-in-out;
+}
+
+/* Scroll effect on hover */
+.pdf-name-container:hover .pdf-name {
+  animation: scroll-text 5s linear infinite;
+  animation-delay: 0.3s;
+  cursor: default;
+}
+
+/* Animation moves text fully to left based on its width */
+@keyframes scroll-text {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+  /* 100% { transform: translateX(0); } */
+}
+
+/* Restart session button */
+.mainpage-reset {
+  padding: 8px 16px;
+  border: none;
+  background-color: #1e1e1e;
+  color: #d3b700;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  height: 40px;
+  transition: background-color 0.2s ease;
+}
+
+.mainpage-reset:hover {
+  background-color: #9f9700;
 }

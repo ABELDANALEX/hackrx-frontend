@@ -5,29 +5,80 @@ import "./MainPage.css";
 
 export default function MainPage() {
   const [sessionID, setSessionID] = useState(null);
-  const [pdfUploaded, setpdfUploaded] = useState(true) //false
+  const [pdfUploaded, setPdfUploaded] = useState(true);
+  const [pdfName, setPdfName] = useState(""); // store uploaded PDF name
+
+  // Safe UUID generator (fallback if crypto.randomUUID is not available)
+  const generateUUID = () =>
+    crypto?.randomUUID?.() || Math.random().toString(36).substring(2) + Date.now();
 
   // Generate or retrieve sessionID from sessionStorage
   useEffect(() => {
     let id = sessionStorage.getItem("sessionID");
     if (!id) {
-      id = crypto.randomUUID();
+      id = generateUUID();
       sessionStorage.setItem("sessionID", id);
-    }else{
-      const uploaded = sessionStorage.getItem(`${id}-pdfUploaded`)
-      if (uploaded == "true") setpdfUploaded(true)
+    } else {
+      const uploaded = sessionStorage.getItem(`${id}-pdfUploaded`);
+      if (uploaded === "true") {
+        setPdfUploaded(true);
+        const name = sessionStorage.getItem(`${id}-pdfName`);
+        if (name) setPdfName(name);
+      }
     }
     setSessionID(id);
   }, []);
 
+  // Restart session: remove all keys starting with current sessionID
+  const restartSession = () => {
+    if (sessionID) {
+      Object.keys(sessionStorage).forEach((key) => {
+        if (key.startsWith(sessionID)) {
+          sessionStorage.removeItem(key);
+        }
+      });
 
-  if (!sessionID) return null //don't render until sessionID is available
+      setSessionID(null);
+      setPdfUploaded(false);
+      setPdfName("");
+
+      // Start a new session
+      const newID = generateUUID();
+      sessionStorage.setItem("sessionID", newID);
+      setSessionID(newID);
+
+      /*Remember to remove ids from indexedDB as well */
+    }
+  };
+
+  if (!sessionID) return null; // don't render until sessionID is available
+
   return (
     <div className="main-page">
       {!pdfUploaded && sessionID && (
-        <UploadPdf sessionID={sessionID} setpdfUploaded={setpdfUploaded} />
+        <UploadPdf
+          sessionID={sessionID}
+          setPdfUploaded={setPdfUploaded}
+          setPdfName={setPdfName}
+        />
       )}
-      {pdfUploaded && sessionID && <QuestionsWindow sessionID={sessionID} />}
+      {pdfUploaded && sessionID && (
+        <>
+          <div className="pdf-info-row">
+            <div className="pdf-name-container">
+              <span className="pdf-name" >
+                {pdfName || "Unnamed PDF"}
+              </span>
+            </div>
+            <button className="mainpage-reset" onClick={restartSession}>
+              RESTART SESSION
+            </button>
+        </div>
+
+          <QuestionsWindow sessionID={sessionID} />
+        </>
+)}
+
     </div>
   );
 }
