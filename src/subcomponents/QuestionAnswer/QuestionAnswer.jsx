@@ -5,10 +5,11 @@ export default function QuestionAnswer({ question, answer }) {
   return (
     <div className="qa-card">
       <div className="qa-question">
-        <strong>Q:</strong> {question}
+        <strong></strong> {question}
       </div>
+      <hr className="qa-rule"/>
       <div className="qa-answer">
-        <strong>A:</strong> {answer}
+        <strong></strong> {answer}
       </div>
     </div>
   );

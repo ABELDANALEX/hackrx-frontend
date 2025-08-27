@@ -58,8 +58,19 @@
   color: #5a5a5a;
 }
 
-.ask-container .ask-btn:hover {
-  color: #888888;
+.ask-container .ask-btn-active {
+   position: absolute;
+  right: 9.5vw;
+  bottom:45px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 60px;
+  color: #7d7d7d; /* green (or any accent color) when text is present */
+}
+
+.ask-container .ask-btn-active:hover {
+  color: #c7c5c5;
   transition: 0.3s;
 }
 

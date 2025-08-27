@@ -103,7 +103,7 @@ export default function QuestionsWindow({ sessionID }) {
             if (e.key === "Enter") handleAsk();
           }}
         />
-        <button onClick={handleAsk} className="ask-btn">
+        <button onClick={handleAsk} className={`ask-btn${currentQuestion.trim() ? "-active":""}`}>
           ➤
         </button>
       </div>
