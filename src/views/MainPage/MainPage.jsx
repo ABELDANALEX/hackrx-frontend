@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-// import UploadPdf from "../../components/UploadPdf/UploadPdf";
+import UploadPdf from "../../components/UploadPdf/UploadPdf";
 import QuestionsWindow from "../../components/QuestionsWindow/QuestionsWindow";
 import "./MainPage.css";
 
 export default function MainPage() {
   const [sessionID, setSessionID] = useState(null);
-  const [pdfUploaded, setPdfUploaded] = useState(true);
+  const [pdfUploaded, setPdfUploaded] = useState(false);
   const [pdfName, setPdfName] = useState(""); // store uploaded PDF name
 
   // Safe UUID generator (fallback if crypto.randomUUID is not available)
@@ -31,6 +31,8 @@ export default function MainPage() {
 
   // Restart session: remove all keys starting with current sessionID
   const restartSession = () => {
+    const response = window.confirm("Are you sure you want to reset session? All progress will be deleted.")
+    if(!response) return;
     if (sessionID) {
       Object.keys(sessionStorage).forEach((key) => {
         if (key.startsWith(sessionID)) {
@@ -71,7 +73,7 @@ export default function MainPage() {
               </span>
             </div>
             <button className="mainpage-reset" onClick={restartSession}>
-              RESTART SESSION
+              RESET SESSION
             </button>
         </div>
 

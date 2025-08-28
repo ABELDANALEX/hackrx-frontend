@@ -1,6 +1,6 @@
 .questions-window {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 94vh;
   background-color: #1e1e1e;
   color: #f0f0f0;
   padding: 20px;
@@ -10,7 +10,7 @@
   padding-left: 4vw;
   padding-right: 4vw;
   justify-content: flex-end;
-  gap: 5rem
+  gap: 5rem;
 }
 
 .file-uploaded-header {
@@ -32,7 +32,7 @@
 
 .ask-container input {
   /* flex: 0 0; */
-  padding: 20px 60px 20px 20px; /* extra right padding for button */
+  padding: 20px 80px 20px 20px; /* extra right padding for button */
   border-radius: 50px;
   border: none;
   outline: none;
@@ -49,7 +49,7 @@
 
 .ask-container .ask-btn {
   position: absolute;
-  right: 9.5vw;
+  right: 11.2vw;
   bottom:45px;
   background: none;
   border: none;
@@ -59,8 +59,8 @@
 }
 
 .ask-container .ask-btn-active {
-   position: absolute;
-  right: 9.5vw;
+  position: absolute;
+  right: 11.2vw;
   bottom:45px;
   background: none;
   border: none;

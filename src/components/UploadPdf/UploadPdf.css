@@ -1,0 +1,169 @@
+.upload-pdf-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;       /* center vertically */
+  gap: 1.5rem;
+  height: 100vh;                 /* full page height */
+  width: 100vw;                  /* full page width */
+  background-color: #1a1a1a;      /* darker background for contrast */
+  color: #f0f0f0;
+  font-family: "Inter", sans-serif;
+}
+
+.drop-area {
+  flex: 1;
+  width: 80%;
+  max-width: 80vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 3px dashed #666;        /* subtle border */
+  border-radius: 16px;
+  background-color: #262626;
+  padding: 3rem 2rem;
+  text-align: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.drop-area:hover {
+  background-color: #2e2e2e;
+  border-color: #aaa;
+}
+
+.drop-area.active {
+  background-color: #333333;
+  border-color: #f0f0f0;
+}
+
+.upload-pdf-container h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #f5f5f5;
+}
+
+.upload-pdf-container input[type="file"] {
+  display: none; /* hidden, use drop area instead */
+}
+
+.upload-pdf-container button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background-color: #444;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+.upload-pdf-container button:hover:not(:disabled) {
+  background-color: #911515;
+  transform: translateY(-2px);
+}
+
+.upload-pdf-container button:disabled {
+  background-color: #2b2b2b;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.error-text {
+  color: #ff6b6b;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.selected-file-name{
+    color:yellow;
+}
+
+.drag-n-drop-text{
+    font-size: 30px;
+    color:#8f8f8f;
+    font-weight:100;
+    cursor: default;
+}
+
+.pdf-upload-header h2 {
+  font-size: 2rem;
+  font-weight:500;
+  margin-bottom: 1rem;
+  color: #4da6ff;  /* accent blue */
+  text-shadow: 0 0 6px rgba(77, 166, 255, 0.3); /* subtle glow */
+}
+
+.selected-file-text{
+    font-size: 20px;
+    font-weight: 600;
+}
+.selected-file-text .selected-file-name{
+    font-weight: 100;
+}
+.upload-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(6px);
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  flex-direction: column;
+}
+
+.uploading-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.uploading-text {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.uploading-text .dot {
+  animation: blink 1.2s infinite;
+}
+
+.uploading-text .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.uploading-text .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Spinner circle */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
