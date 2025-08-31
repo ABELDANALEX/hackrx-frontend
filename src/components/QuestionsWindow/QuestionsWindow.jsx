@@ -14,6 +14,19 @@ export default function QuestionsWindow({ sessionID }) {
 });
 
 
+  const testApiCall = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/v1/hackrx/test");
+        const data = await response.json();
+        console.log(data);
+        return data;
+      } catch (err) {
+        console.error("Error connecting to backend:", err);
+        return { status: "error", message: "Failed to reach backend" };
+      }
+       };
+
+
   const [currentQuestion, setCurrentQuestion] = useState("");
   const [queue, setQueue] = useState([]); // pending questions
   const activeCount = useRef(0); // tracks current concurrent requests

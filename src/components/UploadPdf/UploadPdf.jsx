@@ -38,34 +38,57 @@ export default function UploadPdf({ sessionID, setPdfUploaded, setPdfName }) {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
+  if (!selectedFile) return;
 
-    setUploading(true);
-    setError("");
+  setUploading(true);
+  setError("");
 
-    try {
-      // 🔧 Placeholder: fake API call using Promise + setTimeout
-      const fakeApiCall = () =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({ status: "ok", filename: selectedFile.name });
-          }, 5500); // simulate 1.5s delay
-        });
+  try {
+    // 1️⃣ Test backend connection (existing)
+    const testApiCall = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/v1/hackrx/test");
+        const data = await response.json();
+        return data;
+      } catch (err) {
+        console.error("Error connecting to backend:", err);
+        return { status: "error", message: "Failed to reach backend" };
+      }
+    };
 
-      const result = await fakeApiCall();
-      console.log("Fake API response:", result);
+    const testResult = await testApiCall();
+    console.log("Test backend response:", testResult);
 
-      // Store in sessionStorage for persistence in this tab
-      sessionStorage.setItem(`${sessionID}-pdfUploaded`, "true");
-      sessionStorage.setItem(`${sessionID}-pdfName`, selectedFile.name);
+    // 2️⃣ Upload PDF to backend
+    const formData = new FormData();
+    formData.append("file", selectedFile);
 
-      setPdfUploaded(true);
-    } catch (err) {
-      setError("Error uploading file: " + err.message);
-    } finally {
-      setUploading(false);
+    const uploadResponse = await fetch("http://localhost:8000/api/v1/hackrx/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const uploadData = await uploadResponse.json();
+
+    if (!uploadResponse.ok) {
+      setError(uploadData.detail || "Failed to upload PDF");
+      return;
     }
-  };
+
+    console.log("PDF upload response:", uploadData);
+
+    // Store in sessionStorage for persistence
+    sessionStorage.setItem(`${sessionID}-pdfUploaded`, "true");
+    sessionStorage.setItem(`${sessionID}-pdfName`, selectedFile.name);
+
+    setPdfUploaded(true);
+  } catch (err) {
+    setError("Error uploading file: " + err.message);
+  } finally {
+    setUploading(false);
+  }
+};
+
 
   return (
     <div className="upload-pdf-container">
