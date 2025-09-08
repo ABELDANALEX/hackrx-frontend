@@ -1,5 +1,10 @@
+//components/UploadPdf/UploadPdf.jsx
+
 import React, { useState } from "react";
 import "./UploadPdf.css";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 export default function UploadPdf({ sessionID, setPdfUploaded, setPdfName }) {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -47,7 +52,7 @@ export default function UploadPdf({ sessionID, setPdfUploaded, setPdfName }) {
     // 1️⃣ Test backend connection (existing)
     const testApiCall = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/v1/hackrx/test");
+        const response = await fetch(`${BACKEND_URL}/api/v1/hackrx/test`);
         const data = await response.json();
         return data;
       } catch (err) {
@@ -63,7 +68,7 @@ export default function UploadPdf({ sessionID, setPdfUploaded, setPdfName }) {
     const formData = new FormData();
     formData.append("file", selectedFile);
 
-    const uploadResponse = await fetch("http://localhost:8000/api/v1/hackrx/upload", {
+    const uploadResponse = await fetch(`${BACKEND_URL}/api/v1/hackrx/upload?session_id=${sessionID}`, {
       method: "POST",
       body: formData,
     });

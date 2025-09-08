@@ -1,3 +1,4 @@
+//App.jsx
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import HomePage from './views/HomePage/HomePage'
 import MainPage from "./views/MainPage/MainPage"

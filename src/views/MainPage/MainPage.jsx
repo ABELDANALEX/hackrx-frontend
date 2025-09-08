@@ -1,3 +1,5 @@
+//views/MainPage/MainPage.jsx
+
 import React, { useEffect, useState } from "react";
 import UploadPdf from "../../components/UploadPdf/UploadPdf";
 import QuestionsWindow from "../../components/QuestionsWindow/QuestionsWindow";

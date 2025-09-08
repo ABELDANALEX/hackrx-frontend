@@ -1,3 +1,5 @@
+//subcomponents/QuestionAnswer/QuestionAnswer.jsx
+
 import React, { useEffect, useState } from "react";
 import "./QuestionAnswer.css";
 

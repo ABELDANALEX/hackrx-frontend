@@ -1,6 +1,9 @@
+//components/QuestionsWindow/QuestionsWindow.jsx
 import React, { useState, useEffect, useRef } from "react";
 import "./QuestionsWindow.css";
 import QuestionAnswer from "../../subcomponents/QuestionAnswer/QuestionAnswer";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function QuestionsWindow({ sessionID }) {
   const [questions, setQuestions] = useState(() => {
@@ -16,7 +19,7 @@ export default function QuestionsWindow({ sessionID }) {
 
   const testApiCall = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/v1/hackrx/test");
+        const response = await fetch(`${BACKEND_URL}/api/v1/hackrx/test`);
         const data = await response.json();
         console.log(data);
         return data;
@@ -38,15 +41,25 @@ export default function QuestionsWindow({ sessionID }) {
     sessionStorage.setItem(`${sessionID}-questions`, JSON.stringify(questions));
   }, [questions, sessionID]);
 
-  // Placeholder for API call
-  const fetchAnswer = async (question) => {
-    // Replace with actual RAG / OpenAI API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(`This is a placeholder answer for: "${question}"`);
-      }, 1500);
-    });
+const fetchAnswer = async (question) => {
+  const payload = {
+    session_id: sessionID,
+    questions: [question]
   };
+
+  const response = await fetch(`${BACKEND_URL}/api/v1/hackrx/run`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_AUTH_TOKEN"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await response.json();
+  return data.answers[0]; // answers array contains one answer per question
+};
+
 
   const handleAsk = () => {
     if (!currentQuestion.trim()) return;
@@ -83,7 +96,7 @@ export default function QuestionsWindow({ sessionID }) {
     } catch (err) {
       setQuestions((prev) =>
         prev.map((qa) =>
-          qa.id === next.id ? { ...qa, answer: "Error fetching answer." } : qa
+          qa.id === next.id ? { ...qa, answer: `Error fetching answer.${err}` } : qa //change later
         )
       );
     } finally {

@@ -1,5 +1,5 @@
-// File: HomePage.jsx
-// Path: src/pages/HomePage/HomePage.jsx
+//views/HomePage/HomePage.jsx
+
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
